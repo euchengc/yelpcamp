@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/yelpcamp", {
 })
 
 var seedDB = require('./seedDB');
-seedDB();
+//seedDB();
 
 
 //DATA MODELS
