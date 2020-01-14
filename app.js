@@ -15,7 +15,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useCreateIndex',true);
 //mongoose.connect("mongodb://localhost/yelpcamp");
-mongoose.connect('mongodb+srv://admin:adm!n69@cluster0-drfjk.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGODB_URL || "mongodb://localhost/yelpcamp", {
     useNewUrlParser:true,
     useCreateIndex: true,
     useUnifiedTopology: true
@@ -39,8 +39,11 @@ app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
 app.use(flash());
 
-app.listen(3000, function () {
-    console.log("Server started at port 3000.");
+// app.listen(3000, function () {
+//     console.log("Server started at port 3000.");
+// })
+app.listen(process.env.PORT,process.env.IP, function(){
+    console.log("The Yelpcamp server has started!");
 })
 
 //AUTHENTICATION SETUP (PASSPORT)
