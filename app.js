@@ -14,7 +14,17 @@ app.locals.moment = require('moment');
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useCreateIndex',true);
-mongoose.connect("mongodb://localhost/yelpcamp");
+//mongoose.connect("mongodb://localhost/yelpcamp");
+mongoose.connect('mongodb+srv://admin:adm!n69@cluster0-drfjk.mongodb.net/test?retryWrites=true&w=majority', {
+    useNewUrlParser:true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}).then(()=> {
+    console.log('Connected to DB!');
+}).catch(err=>{
+    console.log('ERROR:', err.message)
+})
+
 var seedDB = require('./seedDB');
 seedDB();
 
