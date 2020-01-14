@@ -1,25 +1,28 @@
 //IMPORTS
+require('dotenv').config();
 var express = require('express');
+var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var passport = require('passport');
 var localStrategy = require('passport-local');
 var methodOverride = require('method-override');
 var flash = require('connect-flash');
+app.locals.moment = require('moment');
 
 //MONGODB SETUP
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useCreateIndex',true);
 mongoose.connect("mongodb://localhost/yelpcamp");
 var seedDB = require('./seedDB');
-//seedDB();
+seedDB();
 
 
 //DATA MODELS
 var User = require('./models/user');
 
 //EXPRESS SETUP
-var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
@@ -53,9 +56,9 @@ app.use(function(req,res,next){
 var commentRoutes = require("./routes/comments");
 var campgroundRoutes = require('./routes/campgrounds');
 var indexRoutes = require('./routes/index');
+var userRoutes = require('./routes/users');
 
 app.use(indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments",commentRoutes);
-
-
+app.use("/users",userRoutes);

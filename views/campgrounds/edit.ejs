@@ -1,18 +1,18 @@
 <%- include('../partials/header') %>
 
-<div class="container">
     <h1 class="text-center my-5">Edit Campground <%=campground.name%></h1>
 
     <div class="row">
         <div class="col-5 mx-auto">
             <div class="row">
                 <div class="col">
-                    <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
+                    <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <input class="form-control" type="text" name="campground[name]" value="<%=campground.name%>">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" type="text" name="campground[image]" value="<%=campground.image%>" readonly>
+                            <label for="image">image</label>
+                            <input type="file" id="image" name="image" accept="image/*">
                         </div>
                         <div class="form-group">
                             <input class="form-control" type="text" name="campground[description]" value="<%=campground.description%>">
@@ -20,6 +20,9 @@
                         <div class="form-group">
                             <input class="form-control" type="number" name="campground[price]" value="<%=campground.price%>" min="0.01" step="0.01">
                         </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="campground[location]" id="location" value="<%=campground.location%>" min="0.01" step="0.01">
+                        </div>                        
                         <button class="btn btn-primary btn-lg btn-block">Submit!</button>
                     </form>
                 </div>
@@ -31,5 +34,4 @@
 
         </div>
     </div>
-</div>
 <%- include('../partials/footer') %>

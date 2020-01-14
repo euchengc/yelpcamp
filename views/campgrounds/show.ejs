@@ -1,5 +1,4 @@
 <%- include('../partials/header') %>
-<div class="container">
     <div class="row">
         <div class="col-md-3">
             <p class="lead">YelpCamp</p>
@@ -8,6 +7,7 @@
                 <li class="list-group-item">Info 2</li>
                 <li class="list-group-item">Info 3</li>
             </div>
+            <div class="" id="map"></div>
         </div>
         <div class="col-md-9">
             <div class="card mb-3">
@@ -18,8 +18,8 @@
                         <h4 class="float-right"">$<%=foundCampground.price%>/night</h4>    
                     </div>
                     <p class=" card-text"><%=foundCampground.description%></p>
-                    <p><em>Submitted BY <%=foundCampground.author.username%></em></p>
-                    <%if(currentUser && foundCampground.author.id.equals(currentUser._id)){%>
+                    <p><em>Submitted BY <a href="/users/<%=foundCampground.author.id%>"><%=foundCampground.author.username%></a>, <%=moment(foundCampground.createdAt).fromNow()%></em></p>
+                    <%if(currentUser && foundCampground.author.id.equals(currentUser._id)||currentUser && currentUser.isAdmin){%>
                         <a class="btn btn-warning" href="/campgrounds/<%=foundCampground._id%>/edit">Edit</a>
                         <form class="delete-form" action="/campgrounds/<%=foundCampground._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
@@ -32,17 +32,19 @@
                     <p><a class="btn btn-success float-right" href="/campgrounds/<%=foundCampground._id%>/comments/new">Leave a
                         review</a></p>
                 </div>
-                
                 <div class="card-body">
                     <%foundCampground.comments.forEach(function(comment){%>
-                        <p style="display:inline"><strong> <%=comment.author.username%></strong></p>
-                        <p class="float-right">10 Days Ago</p>
-                        <p><%=comment.text%></p>
-                        <%if(currentUser && comment.author.id.equals(currentUser._id)){%>
-                        <a href="/campgrounds/<%=foundCampground._id%>/comments/<%=comment._id%>/edit" class="btn btn-sm btn-warning">Edit</a>
-                        <form class="delete-form" action="/campgrounds/<%=foundCampground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                        <div class="m-3">
+                        <p><strong> <%=comment.author.username%></strong><span class="float-right"><%=moment(comment.createdAt).fromNow()%></span></p>
+                        <p class="d-inline"><%=comment.text%></p>
+                        <%if(currentUser && comment.author.id.equals(currentUser._id)||currentUser && currentUser.isAdmin){%>
+                        <div class="float-right">
+                            <a href="/campgrounds/<%=foundCampground._id%>/comments/<%=comment._id%>/edit" class="btn btn-sm btn-warning">Edit</a>
+                            <form class="delete-form" action="/campgrounds/<%=foundCampground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        </div>
                         <%}%>
                         <%})%>
                 </div>
@@ -51,6 +53,34 @@
         
 
     </div>
-</div>
 
+    <script>
+        function initMap() {
+            var lat = <%=foundCampground.lat %>;
+            var lng = <%=foundCampground.lng %>;
+            var center = {lat:lat,lng:lng};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom:8,
+                center: center,
+                scrollwheel:false
+            });
+
+            var contentString = `
+                <strong><%=foundCampground.name %><br />
+                <%= foundCampground.location %></strong>
+                <p><%= foundCampground.description %> </p>
+            `
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: center,
+                map: map
+            });
+            marker.addListener('click',function(){
+                infowindow.open(map,marker);
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB748NdHxuqyH-Lxzb0YuRJD4HzbK3jrfo&callback=initMap"></script>
 <%- include('../partials/footer')%>

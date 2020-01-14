@@ -1,31 +1,40 @@
 <%- include('../partials/header') %>
 
-<div class="container">
     <div class="jumbotron">
         <h1 class="display-4">Welcome to YelpCamp!</h1>
         <p class="lead">View our hand-picked campgrounds from all over the world! </p>
         <!-- <hr class="my-4">
         <p>It uses utility classes for typography and spacing to space content out within the larger container.</p> -->
         <a class="btn btn-primary btn-lg" href="/campgrounds/new" role="button">Add New Campgrounds</a>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
-        <% campgrounds.forEach(function(campground){ %>
-        <div class="col my-2">
-            <div class="card" style="width: auto;">
-                <img src="<%=campground.image%>" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title text-center"> <%= campground.name%></h5>
-                    <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-                  <a href="/campgrounds/<%=campground._id%>" class="btn btn-primary">More Info</a>
+        <p>
+            <form action="/campgrounds" method="GET" class="form-inline">
+                <div class="form-group">
+                    <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                    <input type="submit" value = "Search" class="btn btn-primary">   
                 </div>
-            </div>
-
-        </div>
-        <% }) %>
+            </form>
+        </p>
+    
     </div>
-
-</div>
+    <%if(noMatch){ %>
+        <h3 class="text-center"><%=noMatch%></h3>
+    <%} %>
+    <div class="card-columns">
+        <% campgrounds.forEach(function(campground){ %>
+            
+                <div class="card"">
+                    <img src="<%=campground.image%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title text-center"> <%= campground.name%></h5>
+                        <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+                      <a href="/campgrounds/<%=campground._id%>" class="btn btn-primary">More Info</a>
+                    </div>
+                </div>
+    
+            
+            <% }) %>
+      </div>
+      
 
 
 
